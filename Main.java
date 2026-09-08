@@ -5,7 +5,7 @@ public class Main {
     public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
-        AccountDAO dao = new AccountDAO();
+        BankLedger bank = new BankLedger();
 
         while (true) {
 
@@ -13,7 +13,7 @@ public class Main {
             System.out.println("2. Deposit");
             System.out.println("3. Withdraw");
             System.out.println("4. Balance Check");
-            System.out.println("5. View All Accounts");
+            System.out.println("5. Sorted Ledger");
             System.out.println("6. Exit");
 
             System.out.print("Enter choice: ");
@@ -22,72 +22,46 @@ public class Main {
             switch (choice) {
 
                 case 1:
-                    System.out.print("Enter ID: ");
+                    System.out.print("Enter Account ID: ");
                     int id = sc.nextInt();
 
                     sc.nextLine();
+
                     System.out.print("Enter Name: ");
                     String name = sc.nextLine();
 
-                    System.out.print("Enter Initial Balance: ");
-                    double balance = sc.nextDouble();
-
-                    dao.createAccount(new Account(id, name, balance));
+                    bank.createAccount(id, name);
                     break;
 
                 case 2:
                     System.out.print("Enter Account ID: ");
                     id = sc.nextInt();
 
-                    Account acc = dao.getAccount(id);
+                    System.out.print("Enter Amount: ");
+                    double amount = sc.nextDouble();
 
-                    if (acc != null) {
-                        System.out.print("Enter Amount: ");
-                        double amount = sc.nextDouble();
-                        acc.balance += amount;
-                        System.out.println("Deposit successful!");
-                    } else {
-                        System.out.println("Account not found!");
-                    }
+                    bank.deposit(id, amount);
                     break;
 
                 case 3:
                     System.out.print("Enter Account ID: ");
                     id = sc.nextInt();
 
-                    acc = dao.getAccount(id);
+                    System.out.print("Enter Amount: ");
+                    amount = sc.nextDouble();
 
-                    if (acc != null) {
-                        System.out.print("Enter Amount: ");
-                        double amount = sc.nextDouble();
-
-                        if (amount <= acc.balance) {
-                            acc.balance -= amount;
-                            System.out.println("Withdraw successful!");
-                        } else {
-                            System.out.println("Insufficient balance!");
-                        }
-                    } else {
-                        System.out.println("Account not found!");
-                    }
+                    bank.withdraw(id, amount);
                     break;
 
                 case 4:
                     System.out.print("Enter Account ID: ");
                     id = sc.nextInt();
 
-                    acc = dao.getAccount(id);
-
-                    if (acc != null) {
-                        System.out.println("Balance: ₹" + acc.balance);
-                    } else {
-                        System.out.println("Account not found!");
-                    }
+                    bank.checkBalance(id);
                     break;
 
                 case 5:
-                    System.out.println("\nID | Name | Balance");
-                    dao.viewAllAccounts();
+                    bank.sortedLedger();
                     break;
 
                 case 6:
